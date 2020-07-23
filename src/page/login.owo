@@ -1,0 +1,410 @@
+<template lang="pug">
+.login
+  .login-title-bar
+    img.back(src="https://cunchu.site/puge/login/back.png" o-tap="toLogin")
+    .register(o-tap="toRegister") 注册
+  view.router(name="loginContent")
+    .view-login(route="login")
+      .image-box
+        img(src="https://cunchu.site/puge/login/image-box.png")
+      .user-name-bar.input-bar
+        img.bar-icon(src="https://cunchu.site/puge/login/user.png")
+        input(type="number" o-value="this.data.userPhone" placeholder="手机号")
+      .pass-word-bar.input-bar
+        img.bar-icon(src="https://cunchu.site/puge/login/password.png")
+        input(type="password" o-value="this.data.passWord" placeholder="密码")
+      .button(o-tap="login" o-hover="radial-out") 登录
+      .tool-bar
+        .left
+        .right(o-tap="toForgetPassword") 忘记密码
+      .weixin-login.outher-login
+        img(o-tap="weixinLoginUrl" src="https://cunchu.site/puge/login/weixin.png")
+        p 微信登陆
+    .view-login(route="forgetPassword")
+      p.title 找回密码
+      .phone-number-box
+        input.register-input.phone-number(type="text" o-value="this.data.registerPhone" placeholder="手机号码")
+        button.captcha-button(data-appid="2002224224" data-cbfn="callback" type="button") 发送验证码
+      input.register-input(type="text" o-value="this.data.phoneCode" placeholder="验证码")
+      input.register-input(type="password" o-value="this.data.forgetPassWord" placeholder="新密码")
+      input.register-input(type="password" o-value="this.data.forgetPassWordR" placeholder="重复新密码")
+      .button(o-tap="forget") 重置密码
+    .view-register(route="register")
+      //- 装饰背景
+      img.bg-1(src="https://cunchu.site/puge/login/art.png")
+      input.register-input(type="text" o-value="this.data.registerUserName" placeholder="用户昵称")
+      input.register-input(type="password" o-value="this.data.registerPassWord" placeholder="密码")
+      input.register-input(type="password" o-value="this.data.registerPassWordR" placeholder="确认密码")
+      .phone-number-box
+        input.register-input.phone-number(type="text" o-value="this.data.registerPhone" placeholder="手机号码")
+        button.captcha-button(data-appid="2002224224" data-cbfn="callback" type="button") 发送验证码
+      input.register-input(type="text" o-value="this.data.phoneCode" placeholder="手机验证码")
+      .user-info 注册即代表您已阅读并同意<a href="registerInfo.html">用户协议</a>
+      .button(o-tap="register") 注册
+</template>
+
+<script>
+  window.callback = function(res) {
+    const phone = owo.script.login.data.registerPhone
+    if (!phone || phone == '') {
+      owo.tool.toast('没有填写手机号码!')
+      return
+    }
+    if (phone.length !== 11) {
+      owo.tool.toast('手机号码不正确!')
+      return
+    }
+    // res（用户主动关闭验证码）= {ret: 2, ticket: null}
+    // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
+    if (res.ret === 0) {
+      console.log('请求发送验证码!')
+      getData(`/sendSms?ticket=${res.ticket}&phone=${phone}&randstr=${res.randstr}`, (data) => {
+        owo.tool.toast('验证码发送成功!')
+      })
+    }
+  }
+  module.exports = {
+    data: {
+      userPhone: '',
+      passWord: "",
+      registerUserName: "",
+      registerPassWord: "",
+      registerPassWordR: "",
+      registerPhone: "",
+      phoneCode: '',
+      forgetPassWord: '',
+      forgetPassWordR: ''
+    },
+    created: function () {
+      setTimeout(() => {
+        const loginContent = owo.state.urlVariable["view-loginContent"]
+        if (loginContent != 'login' && loginContent !== undefined) {
+          this.query('.register').style.opacity = '0'
+          this.query('.back').style.opacity = '1'
+        } else {
+          this.query('.register').style.opacity = '1'
+          this.query('.back').style.opacity = '0'
+        }
+      }, 0);
+      // 注册腾讯验证按钮
+      // this.queryAll('.captcha-button').forEach(element => {
+      //   new TencentCaptcha(element)
+      // })
+    },
+    encry: function (text) {
+      text = text.replace('e', 'k')
+      text = text.replace('b', 'a')
+      text = text.replace('q', 'aw')
+      text = text.replace('3', '1')
+      text = text.replace('12', '21')
+      text = text.replace('6', '4')
+      text = text.replace('k', '2')
+      text = text.replace('w', 'n')
+      text = text.replace('o', 'e')
+      return text
+    },
+    login: function () {
+      // 计算md5
+      const password = this.encry(this.data.passWord)
+      if (!this.data.userPhone) {
+        owo.tool.toast('手机号不能为空!')
+        return
+      }
+      if (!password) {
+        if (owo.tool.toast) owo.tool.toast('密码不能为空!')
+        else alert('密码不能为空!')
+        return
+      }
+      fetch(`${serverIP}/login?phone=${this.data.userPhone}&password=${password}&type=supervisor`).then((response) => {return response.json();}).then((res) => {
+        if (res.err === 0) {
+          if (owo.tool.toast) owo.tool.toast('登陆成功')
+          else alert('登陆成功')
+          // do something
+          // 保存token
+          window.userInfo = res.data
+          setTimeout(() => {
+            owo.go('page/')
+          }, 0);
+        } else {
+          if (owo.tool.toast) owo.tool.toast(res.message)
+          else alert(res.message)
+        }
+      })
+    },
+    register: function () {
+      if (!this.data.registerUserName) {
+        if (owo.tool.toast) owo.tool.toast('用户名不能为空哦!')
+        else alert('用户名不能为空哦!')
+        return
+      }
+      if (!this.data.registerPassWord) {
+        owo.tool.toast('密码不能为空哦!')
+        return
+      }
+      if (!this.data.registerPassWordR) {
+        owo.tool.toast('重复密码不能为空哦!')
+        return
+      }
+      if (!this.data.phoneCode) {
+        owo.tool.toast('手机验证码不能为空哦!')
+        return
+      }
+      if (this.data.registerPassWord !== this.data.registerPassWordR) {
+        owo.tool.toast('两次输入的密码不一致哦!')
+        return
+      }
+      const password = this.encry(this.data.registerPassWord)
+      // 获取是否被邀请的信息
+      const variable = _owo.getQueryVariable()
+      getData(`/register?username=${this.data.registerUserName}&password=${password}&phone=${this.data.registerPhone}&phoneCode=${this.data.phoneCode}&inviter=${variable.inviter}`, (data) => {
+        owo.tool.toast('注册成功!')
+        this.toLogin()
+      })
+    },
+    toRegister: function () {
+      // go="/view-loginContent=register/moveToLeft/moveFromRight/true/moveToRight/moveFromLeft"
+      this.query('.register').style.opacity = '0'
+      this.query('.back').style.opacity = '1'
+      owo.go('/view-loginContent=register/moveToLeft/moveFromRight/true/moveToRight/moveFromLeft')
+    },
+    toLogin: function () {
+      this.query('.register').style.opacity = '1'
+      this.query('.back').style.opacity = '0'
+      owo.go('/view-loginContent=login/moveToLeft/moveFromRight/true/moveToRight/moveFromLeft')
+    },
+    toForgetPassword: function () {
+      this.query('.register').style.opacity = '0'
+      this.query('.back').style.opacity = '1'
+      owo.go('/view-loginContent=forgetPassword/moveToLeft/moveFromRight/true/moveToRight/moveFromLeft')
+    },
+    forget: function () {
+      if (!this.data.forgetPassWord) {
+        owo.tool.toast('新密码不能为空!')
+        return
+      }
+      if (this.data.forgetPassWordR !== this.data.forgetPassWord) {
+        owo.tool.toast('重复密码与新密码不一致!')
+        return
+      }
+      console.log(this.data)
+      if (!this.data.phoneCode) {
+        owo.tool.toast('手机验证码没有输入!')
+        return
+      }
+      const password = this.encry(this.data.forgetPassWordR + 'puge')
+      getData(`/forget?phone=${this.data.registerPhone}&password=${this.data.forgetPassWord}&code=${this.data.phoneCode}`, (data) => {
+        if (owo.tool.toast) owo.tool.toast('密码重置成功!')
+        else alert('密码重置成功!')
+        this.toLogin()
+      })
+    },
+    weixinLoginUrl: function () {
+      getData('getWeixinLoginUrl', (url) => {
+        window.location.replace(url)
+      })
+    }
+  }
+</script>
+
+
+<style lang="less">
+.login {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+.login-title-bar {
+  display: flex;
+  justify-content: space-between;
+  height: 45px;
+  align-items: center;
+  .back {
+    width: 12px;
+    margin: 13px;
+    display: block;
+  }
+  .register {
+    font-size: 20px;
+    line-height: 45px;
+    padding-right: 10px;
+  }
+  .active {
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+.image-box {
+  padding: 30px 0;
+}
+.image-box img {
+  height: 160px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 80px;
+}
+.hellow-text {
+  color: #5fccff;
+  font-size: 22px;
+  width: 100%;
+  text-align: center;
+  line-height: 40px;
+}
+.button {
+  background-color: #5fccff;
+  line-height: 50px;
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  width: 84%;
+  margin: 0 auto;
+  border-radius: 25px;
+  display: block;
+  margin-top: 30px;
+  z-index: 99;
+}
+input {
+  border: none;
+  display: block;
+  width: 83%;
+  font-size: 18px;
+  border-radius: 25px;
+  outline: none;
+}
+input {
+  border: none;
+  background-color: transparent;
+  height: 100%;
+  padding-left: 55px;
+  display: block;
+  width: calc(100% - 75px);
+  font-size: 18px;
+  border-radius: 25px;
+  outline: none;
+}
+.view-login {
+  input:active {
+    box-shadow: 1px 1px 5px #ccc;
+  }
+  .input-bar {
+    background-color: #f7f8fa;
+    height: 50px;
+    border-radius: 25px;
+    width: 84%;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+    max-width: 450px;
+    .bar-icon {
+      width: 20px;
+      position: absolute;
+      left: 20px;
+      top: 0px;
+      bottom: 0;
+      margin: auto;
+    }
+  }
+}
+
+.tool-bar {
+  line-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  width: 84%;
+  margin: 0 auto;
+  color: #262626;
+  font-size: 14px;
+}
+.router {
+  height: calc(100% - 45px);
+  overflow: hidden;
+  width: 100%;
+  [route] {
+    width: 100%;
+    height: 100%;
+  }
+}
+.view-register {
+  width: 100%;
+  height: 100%;
+  .bg-1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 47vw;
+  }
+}
+.title {
+  line-height: 40px;
+  font-size: 23px;
+  padding-top: 60px;
+  z-index: 99;
+  background-image: url(https://cunchu.site/puge/login/Signup.png);
+  background-size: 91vw;
+  background-repeat: no-repeat;
+  background-position-y: 15px;
+  padding-left: 20px;
+  font-weight: bold;
+}
+.register-input {
+  height: 50px;
+  background-color: #f7f7fb;
+  margin: 0 auto;
+  margin-top: 20px;
+  padding: 0 5vw;
+  width: 73vw;
+}
+.phone-number {
+  width: 42vw;
+  margin: 0;
+}
+.button {
+  background-color: #fa4169;
+  max-width: 450px;
+}
+.phone-number-box {
+  display: flex;
+  width: 82vw;
+  margin: 0 auto;
+  margin-top: 20px;
+  justify-content: space-between;
+  align-items: center;
+  .captcha-button {
+    height: 38px;
+    border: none;
+    background-color: #009fe9;
+    color: white;
+    width: 24vw;
+    border-radius: 27px;
+    line-height: 38px;
+    font-size: 14px;
+  }
+}
+.weixin-login {
+  width: 80px;
+  text-align: center;
+  line-height: 26px;
+  font-size: 12px;
+  color: #999;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  bottom: 2%;
+  img {
+    width: 45px;
+    display: block;
+    margin: 0 auto;
+  }
+}
+.user-info {
+  font-size: 12px;
+  line-height: 30px;
+  text-align: right;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 10px;
+  color: #999;
+}
+</style>

@@ -1,0 +1,38 @@
+<template lang="pug">
+.home
+  //- 左侧列表
+  .left
+    .menu-item(go="/view-content=room") 房间管理
+  //- 路由
+  view.router(name="content")
+    .router-item(route="room" src="./src/route/room.owo")
+</template>
+
+<script>
+  module.exports = {
+    created: function () {
+
+    }
+  }
+</script>
+
+
+<style lang="less">
+.home {
+  display: flex;
+}
+.left {
+  width: 200px;
+  background-color: white;
+}
+.menu-item {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 15px;
+  font-size: 16px;
+  border-bottom: 1px solid #fbeaea;
+}
+.router {
+  width: calc(100% - 200px);
+}
+</style>
