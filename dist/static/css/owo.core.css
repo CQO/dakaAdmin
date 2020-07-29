@@ -318,12 +318,80 @@ li {
   height: 100%;
   overflow: auto;
 }
+
+.room .id {
+  text-align: center;
+}
+
+.room td {
+  text-align: center;
+}
+
+.room td span {
+  color: #009fe9;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+.room th {
+  background-color: #815aa7;
+  color: white;
+  line-height: 35px;
+}
+
+.room td {
+  line-height: 30px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+
+.room table {
+  width: 100%;
+}
+.room {
+  height: 100%;
+  overflow: auto;
+}
+
+.room .id {
+  text-align: center;
+}
+
+.room td {
+  text-align: center;
+}
+
+.room td span {
+  color: #009fe9;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+.room th {
+  background-color: #815aa7;
+  color: white;
+  line-height: 35px;
+}
+
+.room td {
+  line-height: 30px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+
+.room table {
+  width: 100%;
+}
 .home {
   display: flex;
+  height: 100%;
 }
 
 .home .left {
   width: 200px;
+  border-right: 1px solid #ccc;
   background-color: white;
 }
 
@@ -332,11 +400,12 @@ li {
   line-height: 40px;
   padding: 0 15px;
   font-size: 16px;
+  cursor: pointer;
   border-bottom: 1px solid #fbeaea;
 }
 
 .home .router {
-  width: calc(100% - 200px);
+  width: calc(100% - 201px);
 }
 /* 页面切换动画 */
 .o-page-moveToLeft {

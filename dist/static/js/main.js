@@ -7,11 +7,11 @@ function getData (url, callBack) {
     } else {
       switch (res.err) {
         case 100:
-          owo.tool.toast('认证过期!')
+          alert('认证过期!')
           owo.go('login/view-loginContent=login/moveToLeft/moveFromRight//moveToRight/moveFromLeft')
           break
         case 101:
-          owo.tool.toast(res.message)
+          alert(res.message)
           window.location.href = ''
           break
         case 102:
@@ -21,15 +21,15 @@ function getData (url, callBack) {
           console.log('用户数据已更新!')
           break
         case 103:
-          owo.tool.toast('您的余额不足!')
+          alert('您的余额不足!')
           owo.go('wallet')
           break
         case 104:
-          owo.tool.toast('补签卡数量不足!')
+          alert('补签卡数量不足!')
           owo.go('myCard')
           break
         default:
-          owo.tool.toast(res.message)
+          alert(res.message)
       }
     }
   })

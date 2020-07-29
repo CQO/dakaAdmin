@@ -50,17 +50,13 @@
 	],
 	"scriptList": [
 		{
-			"name": "jquery1.11.0",
-			"src": "https://cunchu.site/owo/script/jquery-1.11.1.min.js"
-		},
-		{
-			"name": "swiper.min.2.0",
-			"src": "https://cunchu.site/owo/script/idangerous.swiper.min.js"
-		},
-		{
 			"name": "main",
 			"src": "./src/main.js",
 			"resource": true
+		},
+		{
+			"name": "dayjs",
+			"src": "https://cunchu.site/owo/script/dayjs.min.js"
 		}
 	],
 	"styleList": [
@@ -68,10 +64,6 @@
 			"name": "main",
 			"src": "./src/main.css",
 			"resource": true
-		},
-		{
-			"name": "swiper.2.0",
-			"src": "https://cunchu.site/owo/style/idangerous.swiper.css"
 		}
 	],
 	"pageList": [

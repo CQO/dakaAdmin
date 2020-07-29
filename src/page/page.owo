@@ -2,9 +2,11 @@
 .home
   //- 左侧列表
   .left
+    .menu-item(go="/view-content=user") 用户管理
     .menu-item(go="/view-content=room") 房间管理
   //- 路由
   view.router(name="content")
+    .router-item(route="user" src="./src/route/user.owo")
     .router-item(route="room" src="./src/route/room.owo")
 </template>
 
@@ -20,9 +22,11 @@
 <style lang="less">
 .home {
   display: flex;
+  height: 100%;
 }
 .left {
   width: 200px;
+  border-right: 1px solid #ccc;
   background-color: white;
 }
 .menu-item {
@@ -30,9 +34,10 @@
   line-height: 40px;
   padding: 0 15px;
   font-size: 16px;
+  cursor: pointer;
   border-bottom: 1px solid #fbeaea;
 }
 .router {
-  width: calc(100% - 200px);
+  width: calc(100% - 201px);
 }
 </style>

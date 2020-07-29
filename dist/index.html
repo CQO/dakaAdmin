@@ -19,7 +19,6 @@
       
     <!-- 附属css文件 -->
     <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
-    <link rel="stylesheet" href="https://cunchu.site/owo/style/idangerous.swiper.css" charset="utf-8">
       
   </head>
   <body>
@@ -27,12 +26,11 @@
     <!-- 页面[login]-->
     <div class="login page" template="login" style="display: none;"><div class="login-title-bar"><img class="back" src="https://cunchu.site/puge/login/back.png" o-tap="toLogin"><div class="register" o-tap="toRegister">注册</div></div><div class="router" view="loginContent"><div class="view-login" route="login"><div class="image-box"><img src="https://cunchu.site/puge/login/image-box.png"></div><div class="user-name-bar input-bar"><img class="bar-icon" src="https://cunchu.site/puge/login/user.png"><input type="number" o-value="this.data.userPhone" placeholder="手机号"></div><div class="pass-word-bar input-bar"><img class="bar-icon" src="https://cunchu.site/puge/login/password.png"><input type="password" o-value="this.data.passWord" placeholder="密码"></div><div class="button" o-tap="login" o-hover="radial-out">登录</div><div class="tool-bar"><div class="left"></div><div class="right" o-tap="toForgetPassword">忘记密码</div></div><div class="weixin-login outher-login"><img o-tap="weixinLoginUrl" src="https://cunchu.site/puge/login/weixin.png"><p>微信登陆</p></div></div><div class="view-login" route="forgetPassword"><p class="title">找回密码</p><div class="phone-number-box"><input class="register-input phone-number" type="text" o-value="this.data.registerPhone" placeholder="手机号码"><button class="captcha-button" data-appid="2002224224" data-cbfn="callback" type="button">发送验证码</button></div><input class="register-input" type="text" o-value="this.data.phoneCode" placeholder="验证码"><input class="register-input" type="password" o-value="this.data.forgetPassWord" placeholder="新密码"><input class="register-input" type="password" o-value="this.data.forgetPassWordR" placeholder="重复新密码"><div class="button" o-tap="forget">重置密码</div></div><div class="view-register" route="register"><img class="bg-1" src="https://cunchu.site/puge/login/art.png"><input class="register-input" type="text" o-value="this.data.registerUserName" placeholder="用户昵称"><input class="register-input" type="password" o-value="this.data.registerPassWord" placeholder="密码"><input class="register-input" type="password" o-value="this.data.registerPassWordR" placeholder="确认密码"><div class="phone-number-box"><input class="register-input phone-number" type="text" o-value="this.data.registerPhone" placeholder="手机号码"><button class="captcha-button" data-appid="2002224224" data-cbfn="callback" type="button">发送验证码</button></div><input class="register-input" type="text" o-value="this.data.phoneCode" placeholder="手机验证码"><div class="user-info">注册即代表您已阅读并同意<a href="registerInfo.html">用户协议</a></div><div class="button" o-tap="register">注册</div></div></div></div>
     <!-- 页面[page]-->
-    <div class="home page" template="page" style="display: none;"><div class="left"><div class="menu-item" go="/view-content=room">房间管理</div></div><div class="router" view="content"><div class="room router-item" route="room"><table><tbody><tr><th>房间ID</th><th>房间名</th><th>开始日期</th><th>打卡时间</th><th>创建人</th><th>房间状态</th></tr><tr o-for="this.data.info"><td>{value.id}</td><td>{value.name}</td><td>{value.start_day}</td><td>{value.daka_time}</td><td>{value.userName}</td><td>{value.finish}</td></tr></tbody></table></div></div></div>
+    <div class="home page" template="page" style="display: none;"><div class="left"><div class="menu-item" go="/view-content=user">用户管理</div><div class="menu-item" go="/view-content=room">房间管理</div></div><div class="router" view="content"><div class="room router-item" route="user"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><th style="width: 80px">用户ID</th><th>用户名</th><th style="width: 180px">用户手机号</th><th style="width: 180px">最后登录时间</th><th>用户余额</th><th>邀请人</th><th>总共邀请人数</th><th>累计收入</th><th>累计打卡</th><th>复活卡数量</th></tr><tr o-for="this.data.info"><td class="id">{value.id}</td><td>{value.username}</td><td>{value.phone}</td><td>{value.last_login_time}</td><td>{value.balance}元</td><td>{value.inviter}</td><td>{value.invite_num}</td><td>{value.revenue}元</td><td>{value.clock_num}</td><td>{value.resurrection}</td></tr></tbody></table></div><div class="room router-item" route="room"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><th style="width: 80px">房间ID</th><th>房间名</th><th style="width: 180px">开始日期</th><th style="width: 180px">打卡时间</th><th>创建人</th><th>房间状态</th><th>是否顶置</th><th>是否推荐</th><th>房间操作</th></tr><tr o-for="this.data.info"><td class="id">{value.id}</td><td>{value.name}</td><td>{value.start_day}</td><td>{value.daka_time}</td><td>{value.userName}</td><td>{value.finish}</td><td>{value.overhead}</td><td>{value.recommend}</td><td>{value.tool}</td></tr></tbody></table></div></div></div>
     
 
-    <script src="https://cunchu.site/owo/script/jquery-1.11.1.min.js" type="text/javascript"  charset="UTF-8"></script>
-    <script src="https://cunchu.site/owo/script/idangerous.swiper.min.js" type="text/javascript"  charset="UTF-8"></script>
     <script src="./static/js/main.js" type="text/javascript"  charset="UTF-8"></script>
+    <script src="https://cunchu.site/owo/script/dayjs.min.js" type="text/javascript"  charset="UTF-8"></script>
 <!-- 框架script文件 -->
 <script src="./static/js/owo.core.js" type="text/javascript" charset="UTF-8"></script>
 <script type="text/javascript" charset="UTF-8">
@@ -242,22 +240,124 @@ owo.script = {
           var _this4 = this;
 
           setTimeout(function () {
-            getData('adminGetRoom', function (data) {
-              console.log(data);
-              data.forEach(function (element) {
-                if (userList[element.user_id]) {
-                  element.userName = userList[element.user_id].username;
-                } else {
-                  element.userName = '已删除用户';
-                }
-
-                element.finish = element.finish == 1 ? '已结束' : '进行中';
-              });
-              _this4.data.info = data;
-
-              _this4.handleEvent();
-            });
+            _this4.getNewData();
           }, 1000);
+        },
+        "getNewData": function getNewData() {
+          var _this5 = this;
+
+          getData('adminGetSQL?mess=' + encodeURIComponent("select * from `user`"), function (data) {
+            var newData = [];
+
+            for (var index = data.length - 1; index > 0; index--) {
+              var element = data[index];
+
+              if (element.last_login_time) {
+                element.last_login_time = dayjs(parseInt(element.last_login_time)).format('YYYY-MM-DD HH:mm');
+              } else {
+                element.last_login_time = '从未登录';
+              }
+
+              newData.push(element);
+            }
+
+            _this5.data.info = newData;
+            console.log(newData);
+
+            _this5.handleEvent();
+          });
+        },
+        "dingzhi": function dingzhi(value, roomID) {
+          var _this6 = this;
+
+          getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE room SET overhead = '" + value + "' where id = " + roomID), function (data) {
+            alert('设置成功!');
+
+            _this6.getNewData();
+          });
+        },
+        "tuijian": function tuijian(value, roomID) {
+          var _this7 = this;
+
+          getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE room SET recommend = '" + value + "' where id = " + roomID), function (data) {
+            alert('设置成功!');
+
+            _this7.getNewData();
+          });
+        },
+        "prop": {
+          "route": "user"
+        },
+        "_name": "user"
+      }, {
+        "data": {
+          "info": []
+        },
+        "created": function created() {
+          var _this8 = this;
+
+          setTimeout(function () {
+            _this8.getNewData();
+          }, 1000);
+        },
+        "getNewData": function getNewData() {
+          var _this9 = this;
+
+          getData('adminGetSQL?mess=' + encodeURIComponent("select * from `room`"), function (data) {
+            var newData = [];
+
+            for (var index = data.length - 1; index > 0; index--) {
+              var element = data[index];
+
+              if (userList[element.user_id]) {
+                element.userName = userList[element.user_id].username;
+              } else {
+                element.userName = '已删除用户';
+              }
+
+              element.tool = '';
+
+              if (element.overhead == 1) {
+                element.tool += "<span o-tap=\"dingzhi(0, " + element.id + ")\">\u53D6\u6D88\u9876\u7F6E</span>";
+              } else {
+                element.tool += "<span o-tap=\"dingzhi(1, " + element.id + ")\">\u8BBE\u7F6E\u9876\u7F6E</span>";
+              }
+
+              if (element.recommend == 1) {
+                element.tool += "<span o-tap=\"tuijian(0, " + element.id + ")\">\u53D6\u6D88\u63A8\u8350</span>";
+              } else {
+                element.tool += "<span o-tap=\"tuijian(1, " + element.id + ")\">\u8BBE\u7F6E\u63A8\u8350</span>";
+              }
+
+              element.overhead = element.overhead == 1 ? '是' : '否';
+              element.recommend = element.recommend == 1 ? '是' : '否';
+              element.finish = element.finish == 1 ? '已结束' : '进行中';
+              newData.push(element);
+            }
+
+            _this9.data.info = newData;
+            console.log(newData);
+
+            _this9.handleEvent();
+          });
+        },
+        "dingzhi": function dingzhi(value, roomID) {
+          var _this10 = this;
+
+          getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE room SET overhead = '" + value + "' where id = " + roomID), function (data) {
+            alert('设置成功!');
+
+            _this10.getNewData();
+          });
+        },
+        "tuijian": function tuijian(value, roomID) {
+          var _this11 = this;
+
+          getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE room SET recommend = '" + value + "' where id = " + roomID), function (data) {
+            alert('设置成功!');
+
+            _this11.getNewData();
+          });
         },
         "prop": {
           "route": "room"
