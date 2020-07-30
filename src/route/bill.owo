@@ -1,0 +1,113 @@
+<template lang="pug">
+.bill
+  plug(_src="./src/route/loading.owo" _name="loading")
+  //- 顶部信息显示条
+  .info-bar
+  table(border="0" cellpadding="0" cellspacing="0")
+    tr
+      th(style="width: 80px") 账单ID
+      th 用户名
+      th(style="width: 180px") 账单金额
+      th(style="width: 180px") 交易时间
+      th 账单类型
+      th 账单说明
+    tr(o-for="this.data.info")
+      td {value.id}
+      td {value.userName}
+      td {value.amount}元
+      td {value.time}
+      td {value.type}
+      td {value.source}</td>
+
+</template>
+
+<script>
+  module.exports = {
+    data: {
+      info: []
+    },
+    created: function () {
+      setTimeout(() => {
+        this.getNewData()
+      }, 1000);
+    },
+    getNewData: function () {
+      getData('adminGetSQL?mess=' + encodeURIComponent("select * from `bill`"), (data) => {
+        let newData = []
+        for (let index = data.length - 1; index > 0; index--) {
+          const element = data[index];
+          if (element.time) {
+            element.time = dayjs(parseInt(element.time)).format('YYYY-MM-DD HH:mm')
+          } else {
+            element.time = '未知时间'
+          }
+          if (userList[element.user_id]) {
+            element.userName = userList[element.user_id].username
+          } else {
+            element.userName = '已删除用户'
+          }
+          let chongzhi = 0
+          let tixian = 0
+          // 只选取当天的
+          if (element.time > new Date(new Date().setHours(0, 0, 0, 0))) {
+            switch (element.type) {
+              case 0:
+                chongzhi += element.amount
+                break;
+              case 1:
+                tixian -= element.amount
+                break;
+            }
+          }
+          
+          this.query('.info-bar').innerHTML = `今日用户充值金额: ${chongzhi}元 今日用户提现金额 ${tixian}元`
+          newData.push(element)
+        }
+        this.data.info = newData
+        this.handleEvent()
+        setTimeout(() => {
+          this.query('.loading').style.display = 'none'
+        }, 0);
+      })
+    }
+  }
+</script>
+
+
+<style lang="less">
+.bill {
+  height: 100%;
+  overflow: auto;
+}
+.id {
+  text-align: center;
+}
+td {
+  text-align: center;
+  span {
+    color: #009fe9;
+    margin: 0 2px;
+    cursor: pointer;
+  }
+}
+th {
+  background-color: #815aa7;
+  color: white;
+  line-height: 35px;
+}
+td {
+  line-height: 30px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+table {
+  width: 100%;
+}
+.info-bar {
+  line-height: 35px;
+  margin: 0 5px;
+  color: #333;
+  font-weight: bold;
+}
+</style>

@@ -57,6 +57,11 @@
 		{
 			"name": "dayjs",
 			"src": "https://cunchu.site/owo/script/dayjs.min.js"
+		},
+		{
+			"name": "notice",
+			"afterbody": true,
+			"src": "./owo_modules/notice.js"
 		}
 	],
 	"styleList": [

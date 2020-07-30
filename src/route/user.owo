@@ -1,5 +1,6 @@
 <template lang="pug">
 .room
+  plug(_src="./src/route/loading.owo" _name="loading")
   table(border="0" cellpadding="0" cellspacing="0")
     tr
       th(style="width: 80px") 用户ID
@@ -11,8 +12,19 @@
       th 总共邀请人数
       th 累计收入
       th 累计打卡
-      th 复活卡数量
-    tr(o-for="this.data.info") <td class="id">{value.id}</td><td>{value.username}</td><td>{value.phone}</td><td>{value.last_login_time}</td><td>{value.balance}元</td><td>{value.inviter}</td><td>{value.invite_num}</td><td>{value.revenue}元</td><td>{value.clock_num}</td><td>{value.resurrection}</td>
+      th(style="width: 80px") 复活卡数量
+    tr(o-for="this.data.info")
+      td.id {value.id}
+      td {value.username}
+      td {value.phone}
+      td {value.last_login_time}
+      td {value.balance}元
+      td {value.inviter}
+      td {value.invite_num}
+      td {value.revenue}元
+      td {value.clock_num}
+      td
+        input(type="number" value="{value.resurrection}" o-blur="setresurrection({value.id})")
 
 </template>
 
@@ -41,20 +53,14 @@
         this.data.info = newData
         console.log(newData)
         this.handleEvent()
+        setTimeout(() => {
+          this.query('.loading').style.display = 'none'
+        }, 0);
       })
     },
-    // 置顶房间
-    dingzhi: function (value, roomID) {
-      getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE room SET overhead = '" + value + "' where id = " + roomID ), (data) => {
-        alert('设置成功!')
-        this.getNewData()
-      })
-    },
-    // 推荐房间
-    tuijian: function (value, roomID) {
-      getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE room SET recommend = '" + value + "' where id = " + roomID ), (data) => {
-        alert('设置成功!')
-        this.getNewData()
+    setresurrection: function (id) {
+      getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE user SET resurrection = '" + this.$target.value + "' where id = " + id ), (data) => {
+        owo.tool.notice('用户补签卡数量修改成功!')
       })
     }
   }
@@ -90,5 +96,10 @@ td {
 }
 table {
   width: 100%;
+}
+input {
+  display: block;
+  width: 80px;
+  text-align: center;
 }
 </style>

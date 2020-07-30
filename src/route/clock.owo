@@ -1,0 +1,124 @@
+<template lang="pug">
+.room
+  plug(_src="./src/route/loading.owo" _name="loading")
+  table(border="0" cellpadding="0" cellspacing="0")
+    tr
+      th(style="width: 80px") 操作ID
+      th 用户名
+      th(style="width: 80px") 房间ID
+      th 房间名称
+      th 用户打卡状态
+      th 加入时间
+      th 打卡金额
+      th(style="width: 180px") 打卡天数
+      th 最后打卡时间
+      th 是否结束
+      th 用户收入
+    tr(o-for="this.data.info")
+      td.id {value.id}
+      td {value.userName}
+      td {value.room_id}
+      td {value.room_name}
+      td {value.state}
+      td {value.join_time}
+      td {value.money}
+      td {value.num}
+      td {value.clock_time}
+      td {value.finish}
+      td {value.income}
+</template>
+
+<script>
+  module.exports = {
+    data: {
+      info: []
+    },
+    created: function () {
+      setTimeout(() => {
+        this.getNewData()
+      }, 1000);
+    },
+    getNewData: function () {
+      getData('adminGetSQL?mess=' + encodeURIComponent("select * from `clock` order by `id` DESC limit 300"), (data) => {
+        let newData = []
+        for (let index = 0; index < data.length; index++) {
+          const element = data[index];
+          if (element.join_time) {
+            element.join_time = dayjs(parseInt(element.join_time)).format('YYYY-MM-DD HH:mm')
+          } else {
+            element.join_time = '未知时间'
+          }
+          if (element.clock_time) {
+            element.clock_time = dayjs(parseInt(element.clock_time)).format('YYYY-MM-DD HH:mm')
+          } else {
+            element.clock_time = '从未打卡'
+          }
+          if (userList[element.user_id]) {
+            element.userName = userList[element.user_id].username
+          } else {
+            element.userName = '已删除用户'
+          }
+          element.finish = element.finish == 1 ? '是' : '否'
+          switch (element.state) {
+            case 0:
+              element.state = '当日未打卡'
+              break;
+            case 1:
+              element.state = '当日已打卡'
+              break;
+            case 2:
+              element.state = '需要补签'
+              break;
+            case 3:
+              element.state = '已经失败'
+              break;
+            case 4:
+              element.state = '使用了补签卡'
+              break;
+            default:
+              break;
+          }
+          newData.push(element)
+        }
+        this.data.info = newData
+        this.handleEvent()
+        setTimeout(() => {
+          this.query('.loading').style.display = 'none'
+        }, 0);
+      })
+    }
+  }
+</script>
+
+
+<style lang="less">
+.room {
+  height: 100%;
+  overflow: auto;
+}
+.id {
+  text-align: center;
+}
+td {
+  text-align: center;
+  span {
+    color: #009fe9;
+    margin: 0 2px;
+    cursor: pointer;
+  }
+}
+th {
+  background-color: #815aa7;
+  color: white;
+  line-height: 35px;
+}
+td {
+  line-height: 30px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+table {
+  width: 100%;
+}
+</style>

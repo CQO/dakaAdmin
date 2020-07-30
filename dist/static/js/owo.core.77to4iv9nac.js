@@ -1,4 +1,4 @@
-// Wed Jul 29 2020 23:57:24 GMT+0800 (GMT+08:00)
+// Thu Jul 30 2020 22:35:16 GMT+0800 (GMT+08:00)
 var owo = {tool: {},state: {},};
 /* 方法合集 */
 var _owo = {
@@ -195,6 +195,18 @@ _owo.addEvent = function (tempDom, moudleScript) {
             break
           }   
           default: {
+            
+            if (attribute.name.slice(0, 8) == 'o-class-') {
+              var bindClassName = attribute.name.slice(8)
+              if (bindClassName) {
+                var value = shaheRun.apply(moudleScript, [eventFor])
+                if (Boolean(value)) {
+                  tempDom.classList.add(bindClassName)
+                } else {
+                  tempDom.classList.remove(bindClassName)
+                }
+              }
+            }
             
             _owo.bindEvent(eventName, eventFor, tempDom, moudleScript)
           }
@@ -998,21 +1010,4 @@ function switchPage (oldUrlParam, newUrlParam) {
 if (window.onhashchange) {window.onhashchange = _owo.hashchange;} else {window.onpopstate = _owo.hashchange;}
 // 执行页面加载完毕方法
 _owo.ready(_owo.showPage)
-
-
-// 这是用于代码调试的自动刷新代码，他不应该出现在正式上线版本!
-if ("WebSocket" in window) {
-  // 打开一个 web socket
-  if (!window._owo.ws) window._owo.ws = new WebSocket("ws://" + window.location.host)
-  window._owo.ws.onmessage = function (evt) { 
-    if (evt.data == 'reload') {
-      location.reload()
-    }
-  }
-  window._owo.ws.onclose = function() { 
-    console.info('与服务器断开连接')
-  }
-} else {
-  console.error('浏览器不支持WebSocket')
-}
 
