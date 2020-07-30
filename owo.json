@@ -113,7 +113,7 @@
 			"merge": false,
 			"allAnimate": false,
 			"title": "{TAG_14226_TAG}",
-			"handleLink": true
+			"handleLink": false
 		}
 	}
 }
