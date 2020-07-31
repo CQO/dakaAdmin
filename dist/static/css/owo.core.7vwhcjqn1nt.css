@@ -449,6 +449,12 @@ li {
   color: #333;
   font-weight: bold;
 }
+
+.bill .search {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 .room {
   height: 100%;
   overflow: auto;
@@ -518,6 +524,90 @@ li {
 
 .room table {
   width: 100%;
+}
+.apply .bill {
+  height: 100%;
+  overflow: auto;
+}
+
+.apply .id {
+  text-align: center;
+}
+
+.apply td {
+  text-align: center;
+}
+
+.apply td span {
+  color: #009fe9;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+.apply th {
+  background-color: #815aa7;
+  color: white;
+  line-height: 35px;
+}
+
+.apply td {
+  line-height: 30px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+
+.apply table {
+  width: 100%;
+}
+
+.apply .info-bar {
+  line-height: 35px;
+  margin: 0 5px;
+  color: #333;
+  font-weight: bold;
+}
+.swiper .bill {
+  height: 100%;
+  overflow: auto;
+}
+
+.swiper .id {
+  text-align: center;
+}
+
+.swiper td {
+  text-align: center;
+}
+
+.swiper td span {
+  color: #009fe9;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+.swiper th {
+  background-color: #815aa7;
+  color: white;
+  line-height: 35px;
+}
+
+.swiper td {
+  line-height: 30px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+
+.swiper table {
+  width: 100%;
+}
+
+.swiper .info-bar {
+  line-height: 35px;
+  margin: 0 5px;
+  color: #333;
+  font-weight: bold;
 }
 .home {
   display: flex;

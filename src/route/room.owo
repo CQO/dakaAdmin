@@ -1,6 +1,9 @@
 <template lang="pug">
 .room
   plug(_src="./src/route/loading.owo" _name="loading")
+  .search
+    input(type="text" placeholder="根房间名称搜索")
+    .search-button(o-tap="search") 搜索
   table(border="0" cellpadding="0" cellspacing="0")
     tr
       th(style="width: 80px") 房间ID
@@ -22,21 +25,30 @@
       info: []
     },
     created: function () {
-      setTimeout(() => {
-        this.getNewData()
-      }, 1000);
+      if (!userList) {
+        setTimeout(() => {
+          this.created()
+        }, 200);
+        return
+      }
+      this.getNewData()
     },
-    getNewData: function () {
-      getData('adminGetSQL?mess=' + encodeURIComponent("select * from `room`"), (data) => {
+    getNewData: function (searchText) {
+      let sql = "select * from `room`"
+      if (searchText) sql += ` WHERE name LIKE '%${searchText}%'`
+      getData('adminGetSQL?mess=' + encodeURIComponent(sql), (data) => {
         let newData = []
-        for (let index = data.length - 1; index > 0; index--) {
+        if (data.length == 0) {
+          alert('没有相关数据!')
+          return
+        }
+        for (let index = data.length - 1; index >= 0; index--) {
           const element = data[index];
           if (userList[element.user_id]) {
             element.userName = userList[element.user_id].username
           } else {
             element.userName = '已删除用户'
           }
-
           element.tool = ''
           if (element.overhead == 1) {
             element.tool += `<span o-tap="dingzhi(0, ${element.id})">取消顶置</span>`
@@ -54,7 +66,6 @@
           newData.push(element)
         }
         this.data.info = newData
-        console.log(newData)
         this.handleEvent()
         setTimeout(() => {
           this.query('.loading').style.display = 'none'
@@ -74,6 +85,11 @@
         alert('设置成功!')
         this.getNewData()
       })
+    },
+    search: function () {
+      const value = this.query('.search input').value
+      console.log(value)
+      this.getNewData(value)
     }
   }
 </script>

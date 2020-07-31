@@ -1,17 +1,24 @@
 <template lang="pug">
-.room
+.apply
   plug(_src="./src/route/loading.owo" _name="loading")
   table(border="0" cellpadding="0" cellspacing="0")
     tr
-      th(style="width: 80px") 日志ID
+      th 申请ID
       th 用户名
-      th(style="width: 180px") 日志类型
-      th 房间ID
-      th 日志时间
-      th(style="width: 180px") 日志内容
+      th 提现金额
+      th 联系方式
+      th 申请说明
+      th 支付宝账号名
+      th 是否已处理
+    tr(o-for="this.data.info")
+      td {value.id}
+      td {value.userName}
+      td {value.number}元
+      td {value.phone}
       
-    tr(o-for="this.data.info") <td class="id">{value.id}</td><td>{value.userName}</td><td>{value.type}</td><td>{value.room_id}</td><td>{value.time}</td><td>{value.text}</td>
-
+      td {value.info}
+      td {value.name}
+      td {value.finish}
 </template>
 
 <script>
@@ -29,19 +36,19 @@
       this.getNewData()
     },
     getNewData: function () {
-      getData('adminGetSQL?mess=' + encodeURIComponent("select * from `log` order by `id` DESC limit 300"), (data) => {
+      getData('adminGetSQL?mess=' + encodeURIComponent("select * from `apply`"), (data) => {
         let newData = []
         for (let index = data.length - 1; index > 0; index--) {
           const element = data[index];
-          if (element.time) {
-            element.time = dayjs(parseInt(element.time)).format('YYYY-MM-DD HH:mm')
+          if (userList[element.userID]) {
+            element.userName = userList[element.userID].username
           } else {
-            element.time = '未知时间'
+            element.userName = '已删除用户'
           }
-          if (userList[element.user_id]) {
-            element.userName = userList[element.user_id].username
+          if (element.finish == 1) {
+            element.finish = '已处理'
           } else {
-            element.userName = ''
+            element.finish = '<span o-tap="chuli(' + element.id +')">处理申请</span>'
           }
           newData.push(element)
         }
@@ -51,13 +58,20 @@
           this.query('.loading').style.display = 'none'
         }, 0);
       })
-    }
+    },
+    // 处理请求
+    chuli: function (id) {
+      getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE apply SET finish = '1' where id = " + id ), (data) => {
+        owo.tool.notice('处理成功!')
+        this.getNewData()
+      })
+    },
   }
 </script>
 
 
 <style lang="less">
-.room {
+.bill {
   height: 100%;
   overflow: auto;
 }
@@ -85,5 +99,11 @@ td {
 }
 table {
   width: 100%;
+}
+.info-bar {
+  line-height: 35px;
+  margin: 0 5px;
+  color: #333;
+  font-weight: bold;
 }
 </style>

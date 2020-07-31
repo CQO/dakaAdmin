@@ -82,3 +82,41 @@ h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, bu
 .pc .no-pc, .phone .no-phone {
   display: none;
 }
+
+td input {
+  height: 30px;
+  width: 98%;
+  padding: 0 1%;
+  border: none;
+  background-color: #eceae6;
+  display: block;
+  color: #666;
+  outline: none;
+}
+
+.search {
+  display: flex;
+  justify-content: flex-end;
+  height: 35px;
+}
+.search input {
+  width: 200px;
+  border: none;
+  text-align: left;
+  outline: none;
+  padding: 0 5px;
+}
+.search-button {
+  width: 80px;
+  text-align: center;
+  line-height: 35px;
+  font-size: 16px;
+  background-color: #009fe9;
+  color: white;
+  cursor: pointer;
+}
+
+.table-box {
+  height: calc(100% - 35px);
+  overflow: auto;
+}

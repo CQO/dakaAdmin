@@ -1,23 +1,30 @@
 <template lang="pug">
 .bill
   plug(_src="./src/route/loading.owo" _name="loading")
-  //- 顶部信息显示条
-  .info-bar
-  table(border="0" cellpadding="0" cellspacing="0")
-    tr
-      th(style="width: 80px") 账单ID
-      th 用户名
-      th(style="width: 180px") 账单金额
-      th(style="width: 180px") 交易时间
-      th 账单类型
-      th 账单说明
-    tr(o-for="this.data.info")
-      td {value.id}
-      td {value.userName}
-      td {value.amount}元
-      td {value.time}
-      td {value.type}
-      td {value.source}</td>
+  .top-bar
+    //- 顶部信息显示条
+    .info-bar
+    .search
+      input(type="text" placeholder="根用户ID搜索")
+      .search-button(o-tap="search") 搜索
+  .table-box
+    table(border="0" cellpadding="0" cellspacing="0")
+      tr
+        th(style="width: 80px") 账单ID
+        th 用户ID
+        th 用户名
+        th(style="width: 180px") 账单金额
+        th(style="width: 180px") 交易时间
+        th 账单类型
+        th 账单说明
+      tr(o-for="this.data.info")
+        td {value.id}
+        td {value.user_id}
+        td {value.userName}
+        td {value.amount}元
+        td {value.time}
+        td {value.type}
+        td {value.source}
 
 </template>
 
@@ -27,14 +34,24 @@
       info: []
     },
     created: function () {
-      setTimeout(() => {
-        this.getNewData()
-      }, 1000);
+      if (!userList) {
+        setTimeout(() => {
+          this.created()
+        }, 200);
+        return
+      }
+      this.getNewData()
     },
-    getNewData: function () {
-      getData('adminGetSQL?mess=' + encodeURIComponent("select * from `bill`"), (data) => {
+    getNewData: function (searchText) {
+      let sql = "select * from `bill`"
+      if (searchText) sql += ` WHERE user_id = '${searchText}'`
+      getData('adminGetSQL?mess=' + encodeURIComponent(sql), (data) => {
         let newData = []
-        for (let index = data.length - 1; index > 0; index--) {
+        if (data.length == 0) {
+          alert('没有相关数据!')
+          return
+        }
+        for (let index = data.length - 1; index >= 0; index--) {
           const element = data[index];
           if (element.time) {
             element.time = dayjs(parseInt(element.time)).format('YYYY-MM-DD HH:mm')
@@ -69,6 +86,10 @@
           this.query('.loading').style.display = 'none'
         }, 0);
       })
+    },
+    search: function () {
+      const value = this.query('.search input').value
+      this.getNewData(value)
     }
   }
 </script>
@@ -109,5 +130,10 @@ table {
   margin: 0 5px;
   color: #333;
   font-weight: bold;
+}
+.search {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 </style>

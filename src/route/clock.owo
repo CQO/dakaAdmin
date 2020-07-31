@@ -1,6 +1,9 @@
 <template lang="pug">
 .room
   plug(_src="./src/route/loading.owo" _name="loading")
+  .search
+    input(type="text" placeholder="根房间名称搜索")
+    .search-button(o-tap="search") 搜索
   table(border="0" cellpadding="0" cellspacing="0")
     tr
       th(style="width: 80px") 操作ID
@@ -34,13 +37,23 @@
       info: []
     },
     created: function () {
-      setTimeout(() => {
-        this.getNewData()
-      }, 1000);
+      if (!userList) {
+        setTimeout(() => {
+          this.created()
+        }, 200);
+        return
+      }
+      this.getNewData()
     },
-    getNewData: function () {
-      getData('adminGetSQL?mess=' + encodeURIComponent("select * from `clock` order by `id` DESC limit 300"), (data) => {
+    getNewData: function (searchText) {
+      let sql = "select * from `clock` order by `id` DESC limit 300"
+      if (searchText) sql = `select * from clock WHERE room_name LIKE '%${searchText}%'`
+      getData('adminGetSQL?mess=' + encodeURIComponent(sql), (data) => {
         let newData = []
+        if (data.length == 0) {
+          alert('没有相关数据!')
+          return
+        }
         for (let index = 0; index < data.length; index++) {
           const element = data[index];
           if (element.join_time) {
@@ -86,6 +99,10 @@
           this.query('.loading').style.display = 'none'
         }, 0);
       })
+    },
+    search: function () {
+      const value = this.query('.search input').value
+      this.getNewData(value)
     }
   }
 </script>

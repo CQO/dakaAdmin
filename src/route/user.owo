@@ -1,6 +1,9 @@
 <template lang="pug">
 .room
   plug(_src="./src/route/loading.owo" _name="loading")
+  .search
+    input(type="text" placeholder="根据昵称搜索")
+    .search-button(o-tap="search") 搜索
   table(border="0" cellpadding="0" cellspacing="0")
     tr
       th(style="width: 80px") 用户ID
@@ -34,14 +37,25 @@
       info: []
     },
     created: function () {
-      setTimeout(() => {
-        this.getNewData()
-      }, 1000);
+      if (!userList) {
+        setTimeout(() => {
+          this.created()
+        }, 200);
+        return
+      }
+      this.getNewData()
     },
-    getNewData: function () {
-      getData('adminGetSQL?mess=' + encodeURIComponent("select * from `user`"), (data) => {
+    getNewData: function (searchText) {
+      let sql = "select * from `user`"
+      if (searchText) sql += ` WHERE username LIKE '%${searchText}%'`
+      getData('adminGetSQL?mess=' + encodeURIComponent(sql), (data) => {
         let newData = []
-        for (let index = data.length - 1; index > 0; index--) {
+        if (data.length == 0) {
+          alert('没有相关数据!')
+          return
+        }
+        
+        for (let index = data.length - 1; index >= 0; index--) {
           const element = data[index];
           if (element.last_login_time) {
             element.last_login_time = dayjs(parseInt(element.last_login_time)).format('YYYY-MM-DD HH:mm')
@@ -51,7 +65,6 @@
           newData.push(element)
         }
         this.data.info = newData
-        console.log(newData)
         this.handleEvent()
         setTimeout(() => {
           this.query('.loading').style.display = 'none'
@@ -62,6 +75,10 @@
       getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE user SET resurrection = '" + this.$target.value + "' where id = " + id ), (data) => {
         owo.tool.notice('用户补签卡数量修改成功!')
       })
+    },
+    search: function () {
+      const value = this.query('.search input').value
+      this.getNewData(value)
     }
   }
 </script>

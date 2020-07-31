@@ -1,0 +1,101 @@
+<template lang="pug">
+.swiper
+  plug(_src="./src/route/loading.owo" _name="loading")
+  table(border="0" cellpadding="0" cellspacing="0")
+    tr
+      th ID
+      th 跳转链接
+      th 文字内容
+      th 图片地址
+    tr(o-for="this.data.info")
+      td {value.id}
+      td
+        input(type="text" value="{value.url}" o-blur="setresurrection('url', {value.id})")
+      td
+        input(type="text" value="{value.description}" o-blur="setresurrection('description', {value.id})")
+      td
+        input(type="text" value="{value.image}" o-blur="setresurrection('image', {value.id})")
+</template>
+
+<script>
+  module.exports = {
+    data: {
+      info: []
+    },
+    created: function () {
+      if (!userList) {
+        setTimeout(() => {
+          this.created()
+        }, 200);
+        return
+      }
+      this.getNewData()
+    },
+    getNewData: function () {
+      getData('adminGetSQL?mess=' + encodeURIComponent("select * from `swiper`"), (data) => {
+        let newData = []
+        for (let index = 0; index < data.length; index++) {
+          const element = data[index];
+          newData.push(element)
+        }
+        this.data.info = newData
+        this.handleEvent()
+        setTimeout(() => {
+          this.query('.loading').style.display = 'none'
+        }, 0);
+      })
+    },
+    // 处理请求
+    chuli: function (id) {
+      getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE apply SET finish = '1' where id = " + id ), (data) => {
+        owo.tool.notice('处理成功!')
+        this.getNewData()
+      })
+    },
+    setresurrection: function (type, id) {
+      console.log("UPDATE swiper SET " + type + " = '" + this.$target.value + "' where id = " + id)
+      getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE swiper SET " + type + " = '" + this.$target.value + "' where id = " + id ), (data) => {
+        owo.tool.notice('设置成功!')
+      })
+    }
+  }
+</script>
+
+
+<style lang="less">
+.bill {
+  height: 100%;
+  overflow: auto;
+}
+.id {
+  text-align: center;
+}
+td {
+  text-align: center;
+  span {
+    color: #009fe9;
+    margin: 0 2px;
+    cursor: pointer;
+  }
+}
+th {
+  background-color: #815aa7;
+  color: white;
+  line-height: 35px;
+}
+td {
+  line-height: 30px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+table {
+  width: 100%;
+}
+.info-bar {
+  line-height: 35px;
+  margin: 0 5px;
+  color: #333;
+  font-weight: bold;
+}
+</style>
