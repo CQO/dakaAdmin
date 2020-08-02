@@ -2,6 +2,19 @@
 .room
   plug(_src="./src/route/loading.owo" _name="loading")
   .search
+    select(o-value="this.data.sql" o-change="getNewData")
+      option(value="select * from `user`") ID升序
+      option(value="select * from `user` order by id desc") ID降序
+      option(value="select * from `user` order by balance asc") 余额升序
+      option(value="select * from `user` order by balance desc") 余额降序
+      option(value="select * from `user` order by invite_num asc") 邀请人数升序
+      option(value="select * from `user` order by invite_num desc") 邀请人数降序
+      option(value="select * from `user` order by revenue asc") 累计收入升序
+      option(value="select * from `user` order by revenue desc") 累计收入降序
+      option(value="select * from `user` order by clock_num asc") 累计打卡升序
+      option(value="select * from `user` order by clock_num desc") 累计打卡降序
+      option(value="select * from `user` order by resurrection asc") 复活卡数量升序
+      option(value="select * from `user` order by resurrection desc") 复活卡数量降序
     input(type="text" placeholder="根据昵称搜索")
     .search-button(o-tap="search") 搜索
   table(border="0" cellpadding="0" cellspacing="0")
@@ -34,7 +47,8 @@
 <script>
   module.exports = {
     data: {
-      info: []
+      info: [],
+      sql: "select * from `user` order by id desc"
     },
     created: function () {
       if (!userList) {
@@ -46,8 +60,8 @@
       this.getNewData()
     },
     getNewData: function (searchText) {
-      let sql = "select * from `user`"
-      if (searchText) sql += ` WHERE username LIKE '%${searchText}%'`
+      let sql = this.data.sql
+      if (searchText) sql = `select * from user WHERE username LIKE '%${searchText}%'`
       getData('adminGetSQL?mess=' + encodeURIComponent(sql), (data) => {
         let newData = []
         if (data.length == 0) {
@@ -55,7 +69,7 @@
           return
         }
         
-        for (let index = data.length - 1; index >= 0; index--) {
+        for (let index = 0; index < data.length; index++) {
           const element = data[index];
           if (element.last_login_time) {
             element.last_login_time = dayjs(parseInt(element.last_login_time)).format('YYYY-MM-DD HH:mm')
@@ -118,5 +132,10 @@ input {
   display: block;
   width: 80px;
   text-align: center;
+}
+select {
+  border: none;
+  margin-right: 10px;
+  width: 160px;
 }
 </style>

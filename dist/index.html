@@ -16,7 +16,7 @@
   <meta name="pagetype" content="2" />
 
   <!-- 页面主样式文件 -->
-  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.7vwhcjqn1nt.css">
+  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.yworqdnxd9t.css">
 
   <!-- 附属css文件 -->
   <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
@@ -99,6 +99,20 @@
             </g>
           </svg></div>
         <div class="search">
+          <select o-value="this.data.sql" o-change="getNewData">
+            <option value="select * from `user`">ID升序</option>
+            <option value="select * from `user` order by id desc">ID降序</option>
+            <option value="select * from `user` order by balance asc">余额升序</option>
+            <option value="select * from `user` order by balance desc">余额降序</option>
+            <option value="select * from `user` order by invite_num asc">邀请人数升序</option>
+            <option value="select * from `user` order by invite_num desc">邀请人数降序</option>
+            <option value="select * from `user` order by revenue asc">累计收入升序</option>
+            <option value="select * from `user` order by revenue desc">累计收入降序</option>
+            <option value="select * from `user` order by clock_num asc">累计打卡升序</option>
+            <option value="select * from `user` order by clock_num desc">累计打卡降序</option>
+            <option value="select * from `user` order by resurrection asc">复活卡数量升序</option>
+            <option value="select * from `user` order by resurrection desc">复活卡数量降序</option>
+          </select>
           <input type="text" placeholder="根据昵称搜索">
           <div class="search-button" o-tap="search">搜索</div>
         </div>
@@ -346,6 +360,7 @@
               <th>联系方式</th>
               <th>申请说明</th>
               <th>支付宝账号名</th>
+              <th>申请时间</th>
               <th>是否已处理</th>
             </tr>
             <tr o-for="this.data.info">
@@ -355,6 +370,7 @@
               <td>{value.phone}</td>
               <td>{value.info}</td>
               <td>{value.name}</td>
+              <td>{value.time}</td>
               <td>{value.finish}</td>
             </tr>
           </tbody>
@@ -407,7 +423,7 @@
   <script src="./static/js/main.js" type="text/javascript" charset="UTF-8"></script>
   <script src="https://cunchu.site/owo/script/dayjs.min.js" type="text/javascript" charset="UTF-8"></script>
   <!-- 框架script文件 -->
-  <script src="./static/js/owo.core.7vwhcjqn1nt.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="./static/js/owo.core.yworqdnxd9t.js" type="text/javascript" charset="UTF-8"></script>
   <script type="text/javascript" charset="UTF-8">
     // 模块 login 的script代码
     window.callback = function(res) {
@@ -623,7 +639,8 @@
         "view": {
           "content": [{
             "data": {
-              "info": []
+              "info": [],
+              "sql": "select * from `user` order by id desc"
             },
             "created": function created() {
               var _this5 = this;
@@ -640,8 +657,8 @@
             "getNewData": function getNewData(searchText) {
               var _this6 = this;
 
-              var sql = "select * from `user`";
-              if (searchText) sql += " WHERE username LIKE '%" + searchText + "%'";
+              var sql = this.data.sql;
+              if (searchText) sql = "select * from user WHERE username LIKE '%" + searchText + "%'";
               getData('adminGetSQL?mess=' + encodeURIComponent(sql), function(data) {
                 var newData = [];
 
@@ -650,7 +667,7 @@
                   return;
                 }
 
-                for (var index = data.length - 1; index >= 0; index--) {
+                for (var index = 0; index < data.length; index++) {
                   var element = data[index];
 
                   if (element.last_login_time) {
@@ -934,7 +951,7 @@
             "getNewData": function getNewData(searchText) {
               var _this16 = this;
 
-              var sql = "select * from `clock` order by `id` DESC limit 300";
+              var sql = "select *select * from `clock` order by `id` DESC limit 300";
               if (searchText) sql = "select * from clock WHERE room_name LIKE '%" + searchText + "%'";
               getData('adminGetSQL?mess=' + encodeURIComponent(sql), function(data) {
                 var newData = [];
@@ -1048,6 +1065,12 @@
                     element.finish = '已处理';
                   } else {
                     element.finish = '<span o-tap="chuli(' + element.id + ')">处理申请</span>';
+                  }
+
+                  if (element.time) {
+                    element.time = dayjs(parseInt(element.time)).format('YYYY-MM-DD HH:mm');
+                  } else {
+                    element.time = '未知时间';
                   }
 
                   newData.push(element);

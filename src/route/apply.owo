@@ -9,6 +9,7 @@
       th 联系方式
       th 申请说明
       th 支付宝账号名
+      th 申请时间
       th 是否已处理
     tr(o-for="this.data.info")
       td {value.id}
@@ -18,6 +19,7 @@
       
       td {value.info}
       td {value.name}
+      td {value.time}
       td {value.finish}
 </template>
 
@@ -49,6 +51,11 @@
             element.finish = '已处理'
           } else {
             element.finish = '<span o-tap="chuli(' + element.id +')">处理申请</span>'
+          }
+          if (element.time) {
+            element.time = dayjs(parseInt(element.time)).format('YYYY-MM-DD HH:mm')
+          } else {
+            element.time = '未知时间'
           }
           newData.push(element)
         }

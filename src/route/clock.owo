@@ -46,7 +46,7 @@
       this.getNewData()
     },
     getNewData: function (searchText) {
-      let sql = "select * from `clock` order by `id` DESC limit 300"
+      let sql = "select *select * from `clock` order by `id` DESC limit 300"
       if (searchText) sql = `select * from clock WHERE room_name LIKE '%${searchText}%'`
       getData('adminGetSQL?mess=' + encodeURIComponent(sql), (data) => {
         let newData = []

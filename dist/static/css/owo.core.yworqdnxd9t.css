@@ -372,6 +372,12 @@ li {
   width: 80px;
   text-align: center;
 }
+
+.room select {
+  border: none;
+  margin-right: 10px;
+  width: 160px;
+}
 .room {
   height: 100%;
   overflow: auto;

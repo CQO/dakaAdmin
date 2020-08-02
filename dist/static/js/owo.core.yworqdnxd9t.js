@@ -1,4 +1,4 @@
-// Fri Jul 31 2020 22:46:58 GMT+0800 (GMT+08:00)
+// Sun Aug 02 2020 23:39:20 GMT+0800 (GMT+08:00)
 var owo = {tool: {},state: {},};
 /* 方法合集 */
 var _owo = {
@@ -709,7 +709,10 @@ _owo.getViewChange = function () {
 
 
 owo.go = function (aniStr) {
-  if (!aniStr) return
+  if (!aniStr || typeof aniStr !== 'string')  {
+    console.error('owo.go的正确使用方法为: owo.go("页面名/URL参数/入场动画/离场动画/是否允许返回/返回入场动画/返回离场动画")')
+    return
+  }
   var target = aniStr.split('/')
   var config = {
     page: target[0],
