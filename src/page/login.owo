@@ -76,16 +76,6 @@
       forgetPassWordR: ''
     },
     created: function () {
-      setTimeout(() => {
-        const loginContent = owo.state.urlVariable["view-loginContent"]
-        if (loginContent != 'login' && loginContent !== undefined) {
-          this.query('.register').style.opacity = '0'
-          this.query('.back').style.opacity = '1'
-        } else {
-          this.query('.register').style.opacity = '1'
-          this.query('.back').style.opacity = '0'
-        }
-      }, 0);
       // 注册腾讯验证按钮
       // this.queryAll('.captcha-button').forEach(element => {
       //   new TencentCaptcha(element)
@@ -117,13 +107,21 @@
       }
       fetch(`${serverIP}/login?phone=${this.data.userPhone}&password=${password}&type=supervisor`).then((response) => {return response.json();}).then((res) => {
         if (res.err === 0) {
+          window.userInfo = res.data
+          getData('adminGetUser?', (data) => {
+            let newArr = {}
+            data.forEach(element => {
+              newArr[element.id] = element
+            });
+            userList = newArr
+          })
           if (owo.tool.toast) owo.tool.toast('登陆成功')
           else alert('登陆成功')
           // do something
           // 保存token
-          window.userInfo = res.data
+          
           setTimeout(() => {
-            owo.go('page/')
+            owo.go('page/view-content=user')
           }, 0);
         } else {
           if (owo.tool.toast) owo.tool.toast(res.message)

@@ -321,6 +321,7 @@ li {
   width: 100%;
   height: 100%;
   background-color: white;
+  z-index: 9;
 }
 
 .loading svg {
@@ -331,49 +332,54 @@ li {
   bottom: 0;
   margin: auto;
 }
-.room {
+.user .room {
   height: 100%;
   overflow: auto;
 }
 
-.room .id {
+.user .id {
   text-align: center;
 }
 
-.room td {
+.user td {
   text-align: center;
+  position: relative;
 }
 
-.room td span {
+.user td span {
   color: #009fe9;
   margin: 0 2px;
   cursor: pointer;
 }
 
-.room th {
+.user th {
   background-color: #815aa7;
   color: white;
   line-height: 35px;
 }
 
-.room td {
+.user td {
   line-height: 30px;
   background-color: white;
   border-bottom: 1px solid #ccc;
   color: #333;
 }
 
-.room table {
+.user table {
   width: 100%;
 }
 
-.room input {
+.user input {
   display: block;
   width: 80px;
   text-align: center;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-.room select {
+.user select {
   border: none;
   margin-right: 10px;
   width: 160px;

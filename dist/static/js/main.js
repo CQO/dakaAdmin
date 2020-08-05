@@ -1,7 +1,13 @@
 
 const serverIP = 'http://154.8.196.163:8007'
 function getData (url, callBack) {
-  fetch(`${serverIP}/${url}`).then((response) => {return response.json();}).then((res) => {
+  if (!window.userInfo) {
+    setTimeout(() => {
+      owo.go('login')
+    }, 0);
+    return
+  }
+  fetch(`${serverIP}/${url}&userID=${userInfo.id}&token=${userInfo.token}`).then((response) => {return response.json();}).then((res) => {
     if (res.err === 0) {
       if (callBack) callBack(res.data)
     } else {
@@ -34,6 +40,7 @@ function getData (url, callBack) {
     }
   })
 }
+
 let userList = {}
 getData('adminGetUser', (data) => {
   let newArr = {}
