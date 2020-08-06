@@ -4,7 +4,7 @@ function getData (url, callBack) {
   if (!window.userInfo) {
     setTimeout(() => {
       owo.go('login')
-    }, 0);
+    }, 100);
     return
   }
   fetch(`${serverIP}/${url}&userID=${userInfo.id}&token=${userInfo.token}`).then((response) => {return response.json();}).then((res) => {

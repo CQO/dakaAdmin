@@ -108,6 +108,9 @@
       fetch(`${serverIP}/login?phone=${this.data.userPhone}&password=${password}&type=supervisor`).then((response) => {return response.json();}).then((res) => {
         if (res.err === 0) {
           window.userInfo = res.data
+          if (res.data.type != 1) {
+            document.body.classList.add('close')
+          }
           getData('adminGetUser?', (data) => {
             let newArr = {}
             data.forEach(element => {

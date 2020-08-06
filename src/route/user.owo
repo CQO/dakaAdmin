@@ -53,14 +53,13 @@
       info: [],
       sql: "select * from `user` order by id desc"
     },
-    created: function () {
+    show: function () {
       if (!userList) {
         setTimeout(() => {
           this.created()
         }, 200);
         return
       }
-      console.log('-----------------------')
       this.getNewData()
     },
     getNewData: function (searchText) {
@@ -108,7 +107,7 @@
 
 
 <style lang="less">
-.room {
+.user {
   height: 100%;
   overflow: auto;
 }
@@ -138,7 +137,7 @@ td {
 table {
   width: 100%;
 }
-input {
+td input {
   display: block;
   width: 80px;
   text-align: center;

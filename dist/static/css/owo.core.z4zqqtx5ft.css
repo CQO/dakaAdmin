@@ -332,7 +332,7 @@ li {
   bottom: 0;
   margin: auto;
 }
-.user .room {
+.user {
   height: 100%;
   overflow: auto;
 }
@@ -369,7 +369,7 @@ li {
   width: 100%;
 }
 
-.user input {
+.user td input {
   display: block;
   width: 80px;
   text-align: center;

@@ -120,3 +120,8 @@ td input {
   height: calc(100% - 35px);
   overflow: auto;
 }
+
+.close td input, .close td span {
+  user-select: none;
+  pointer-events: none;
+}

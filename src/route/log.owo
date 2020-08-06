@@ -19,7 +19,7 @@
     data: {
       info: []
     },
-    created: function () {
+    show: function () {
       if (!userList) {
         setTimeout(() => {
           this.created()
