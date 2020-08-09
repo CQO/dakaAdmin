@@ -121,7 +121,7 @@ td input {
   overflow: auto;
 }
 
-.close td input, .close td span {
+.close td input {
   user-select: none;
   pointer-events: none;
 }
