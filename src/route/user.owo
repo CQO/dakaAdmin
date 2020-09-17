@@ -30,6 +30,7 @@
       th 累计打卡
       th 用户类型
       th(style="width: 80px") 复活卡数量
+      th(style="width: 80px") 操作
     tr(o-for="this.data.info")
       td.id {value.id}
       td {value.username}
@@ -44,7 +45,8 @@
         input(type="number" value="{value.type}" o-blur="settype({value.id})")
       td
         input(type="number" value="{value.resurrection}" o-blur="setresurrection({value.id})")
-
+      td
+        span(o-tap="chongzhi({value.id})") 重置密码
 </template>
 
 <script>
@@ -101,6 +103,11 @@
     search: function () {
       const value = this.query('.search input').value
       this.getNewData(value)
+    },
+    chongzhi: function (id) {
+      getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE user SET password = '5106e30108c874f30dec4d4f269fb7ff' where id = " + id ), (data) => {
+        owo.tool.notice('修改用户权限成功!')
+      })
     }
   }
 </script>

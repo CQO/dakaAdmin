@@ -16,7 +16,7 @@
   <meta name="pagetype" content="2" />
 
   <!-- 页面主样式文件 -->
-  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.5vbf90s9j1h.css">
+  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.noa6b1ln6fo.css">
 
   <!-- 附属css文件 -->
   <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
@@ -130,6 +130,7 @@
               <th>累计打卡</th>
               <th>用户类型</th>
               <th style="width: 80px">复活卡数量</th>
+              <th style="width: 80px">操作</th>
             </tr>
             <tr o-for="this.data.info">
               <td class="id">{value.id}</td>
@@ -146,6 +147,9 @@
               </td>
               <td>
                 <input type="number" value="{value.resurrection}" o-blur="setresurrection({value.id})">
+              </td>
+              <td>
+                <span o-tap="chongzhi({value.id})">重置密码</span>
               </td>
             </tr>
           </tbody>
@@ -427,7 +431,7 @@
   <script src="./static/js/main.js" type="text/javascript" charset="UTF-8"></script>
   <script src="https://cunchu.site/owo/script/dayjs.min.js" type="text/javascript" charset="UTF-8"></script>
   <!-- 框架script文件 -->
-  <script src="./static/js/owo.core.5vbf90s9j1h.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="./static/js/owo.core.noa6b1ln6fo.js" type="text/javascript" charset="UTF-8"></script>
   <script type="text/javascript" charset="UTF-8">
     // 模块 login 的script代码
     window.callback = function(res) {
@@ -704,6 +708,11 @@
             "search": function search() {
               var value = this.query('.search input').value;
               this.getNewData(value);
+            },
+            "chongzhi": function chongzhi(id) {
+              getData('adminGetSQL?mess=' + encodeURIComponent("UPDATE user SET password = '5106e30108c874f30dec4d4f269fb7ff' where id = " + id), function(data) {
+                owo.tool.notice('修改用户权限成功!');
+              });
             },
             "prop": {
               "route": "user"

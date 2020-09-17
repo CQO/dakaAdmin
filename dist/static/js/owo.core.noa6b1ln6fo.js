@@ -1,4 +1,4 @@
-// Sun Aug 09 2020 23:09:04 GMT+0800 (GMT+08:00)
+// Thu Sep 17 2020 19:45:39 GMT+0800 (GMT+08:00)
 var owo = {tool: {},state: {},};
 /* 方法合集 */
 var _owo = {
@@ -162,6 +162,7 @@ _owo.addEvent = function (tempDom, moudleScript) {
                       shaheRun.apply(moudleScript, [eventFor + '=' + value])
                     }
                     break;
+                  case 'color':
                   case 'password':
                   case 'text':
                     if (value == undefined) value = ''
@@ -876,6 +877,7 @@ _owo.showPage = function() {
     owo.script[key].$el = document.querySelector('.page[template="' + key + '"]')
     owo.script[key] = new Page(owo.script[key])
     owo.script[key]._index = _index++
+    owo.script[key]._name = key
   }
   owo.entry = document.querySelector('[template]').getAttribute('template')
   // 取出URL地址判断当前所在页面
@@ -920,8 +922,6 @@ _owo.hashchange = function () {
   // 判断是否正在忙碌
   if (owo.state.hashchange) {
     setTimeout(function () {
-      if (owo.state.hashchange === 1) return
-      owo.state.hashchange = 1
       _owo.hashchange()
     }, 300);
     return
